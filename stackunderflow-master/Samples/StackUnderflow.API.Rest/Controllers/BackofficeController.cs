@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,10 +48,9 @@ namespace StackUnderflow.API.Rest.Controllers
             dependencies.SendInvitationEmail = SendEmail;
 
             var expr = from createTenantResult in BackofficeDomain.CreateTenant(createTenantCmd)
-                       let adminUser = createTenantResult.SafeCast<CreateTenantResult.TenantCreated>().Select(p => p.AdminUser)
-                       let inviteAdminCmd = new InviteTenantAdminCmd(adminUser)
-                       from inviteAdminResult in BackofficeDomain.InviteTenantAdmin(inviteAdminCmd)
-                       select new { createTenantResult, inviteAdminResult };
+                           /*  let inviteAdminCmd = new InviteTenantAdminCmd(adminUser)
+                            from inviteAdminResult in BackofficeDomain.InviteTenantAdmin(inviteAdminCmd)*/
+                       select new { createTenantResult };//inviteAdminResult
 
             var r = await _interpreter.Interpret(expr, ctx, dependencies);
             _dbContext.SaveChanges();
